@@ -14,4 +14,4 @@ class ProdutoAdmin(admin.ModelAdmin):
 # Registro dos modelos no admin
 admin.site.register(Fabricante, FabricanteAdmin)
 admin.site.register(Categoria)
-admin.site.register(Produto, ProdutoAdmin)
+#admin.site.register(Produto, ProdutoAdmin)
