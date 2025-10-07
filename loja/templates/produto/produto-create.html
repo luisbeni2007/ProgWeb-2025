@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Início{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="content">
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" action="/produto/create">
+            {% csrf_token %}
+
+            <div class="row mb-2">
+                <!--<input type="hidden" value="{{ produto.id }}" name="id">-->
+                <label for="Produto" class="col-md-2">Produto</label>
+                <input name="Produto" class="form-control col-md-4">
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-2">
+                    <input type="checkbox" name="destaque" id="destaque">
+                    <label for="destaque">Destaque</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-2">
+                    <input type="checkbox" name="promocao" id="promocao">
+                    <label for="promocao">Promoção</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <label for="msgPromocao" class="col-md-2">Msg Promoção</label>
+                <input name="msgPromocao" class="form-control col-md-4">
+            </div>
+
+            <div class="row mb-2">
+                <label for="preco" class="col-md-2">Preço</label>
+                <input name="preco" class="form-control col-md-4">
+            </div>
+
+            <div class="row mb-2">
+                <label for="image" class="col-md-2">Imagem</label>
+                <input type="file" name="image" class="form-control col-md-4">
+            </div>
+
+            <div class="row mt-3">
+                <button type="submit" class="btn btn-danger col-md-2 mr-2">
+                    <i class="fa fa-check"></i> Inserir
+                </button>
+                <a href="{% url 'produto' %}" class="btn bg-secondary col-md-2">
+                    <i class="fa fa-rotate-left"></i> Retornar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
