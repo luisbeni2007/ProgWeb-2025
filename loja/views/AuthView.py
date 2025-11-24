@@ -43,44 +43,48 @@ def login_view(request):
         status=200
     )
 
-if verifyUsername is not None:
-    message = {
-        'type': 'danger',
-        'text': 'Já existe um usuário com este username!'
-    }
 
-elif verifyEmail is not None:
-    message = {
-        'type': 'danger',
-        'text': 'Já existe um usuário com este e-mail!'
-    }
 
-else:
-    user = User.objects.create_user(username, email, password)
 
-    if user is not None:
-        message = {
-            'type': 'success',
-            'text': 'Conta criada com sucesso!'
-        }
-    else:
+
+    if verifyUsername is not None:
         message = {
             'type': 'danger',
-            'text': 'Um erro ocorreu ao tentar criar o usuário.'
+            'text': 'Já existe um usuário com este username!'
         }
 
-context = {
-    'form': registerForm,
-    'message': message,
-    'title': 'Registrar',
-    'button_text': 'Registrar',
-    'link_text': 'Login',
-    'link_href': '/login'
-}
+    elif verifyEmail is not None:
+        message = {
+            'type': 'danger',
+            'text': 'Já existe um usuário com este e-mail!'
+        }
 
-return render(
-    request,
-    template_name='auth/auth.html',
-    context=context,
-    status=200
-)
+    else:
+        user = User.objects.create_user(username, email, password)
+
+        if user is not None:
+            message = {
+                'type': 'success',
+                'text': 'Conta criada com sucesso!'
+            }
+        else:
+            message = {
+                'type': 'danger',
+                'text': 'Um erro ocorreu ao tentar criar o usuário.'
+            }
+
+    context = {
+        'form': registerForm,
+        'message': message,
+        'title': 'Registrar',
+        'button_text': 'Registrar',
+        'link_text': 'Login',
+        'link_href': '/login'
+    }
+
+    return render(
+        request,
+        template_name='auth/auth.html',
+        context=context,
+        status=200
+    )

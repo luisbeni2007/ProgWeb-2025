@@ -7,7 +7,7 @@ urlpatterns = [
 path('admin/', admin.site.urls),
 path('', include('loja.urls.HomeUrls')),
 # Adicione a linha a seguir
-path('', include(‘loja.urls.AuthUrls')),
+path('', include('loja.urls.AuthUrls')),
 # Até aqui
 path('produto/', include('loja.urls.ProdutoUrls')),
 path('usuario/', include('loja.urls.UsuarioUrls')),
