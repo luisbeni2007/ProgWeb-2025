@@ -1,15 +1,11 @@
 from django.contrib import admin
-# Register your models here.
-from ..loja.models import *  # importa nossos models
-
+from .models import *
 class FabricanteAdmin(admin.ModelAdmin):
-    date_hierarchy = 'criado_em'
-
-#class ProdutoAdmin(admin.ModelAdmin):
-#    date_hierarchy = 'criado_em'
-#    list_display = ('Produto', 'destaque', 'promocao', 'msgPromocao', 'preco', 'categoria')
-#    empty_value_display = 'Vazio'
-
+#Conteudo da classe
 admin.site.register(Fabricante, FabricanteAdmin)
 admin.site.register(Categoria)
-#admin.site.register(Produto, ProdutoAdmin)
+class ProdutoAdmin(admin.ModelAdmin):
+#Conteudo da classe
+admin.site.register(Produto, ProdutoAdmin)
+# incluir a tabela de usuário no final
+admin.site.register(Usuario)
