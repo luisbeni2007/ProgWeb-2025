@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from loja.models.Usuario import Usuario
+from django.contrib.auth.models import User
 
 
 class UserUsuarioForm(ModelForm):
@@ -23,4 +24,16 @@ class UserUsuarioForm(ModelForm):
                     'type': "date"
                 }
             )
+        }
+
+# Adicione o código da classe UserForm
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': "form-control"}),
+            'email': forms.EmailInput(attrs={'class': "form-control"}),
+            'first_name': forms.TextInput(attrs={'class': "form-control"}),
+            'last_name': forms.TextInput(attrs={'class': "form-control"})
         }
