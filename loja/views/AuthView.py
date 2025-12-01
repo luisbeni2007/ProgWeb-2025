@@ -1,5 +1,8 @@
+# Adicione a linha a seguir
+from django.contrib.auth.decorators import login_required
+# Até aqui
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login , logout
 from loja.forms.AuthForm import LoginForm
 
 
@@ -20,8 +23,14 @@ def login_view(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('/')
-            else:
+                # Adicione as linhas a seguir
+            _next = request.GET.get('next')
+            if _next is not None:
+                return redirect(_next)
+        else:
+            return redirect("/")
+            # Até aqui
+    else:
                 message = {
                     'type': 'danger',
                     'text': 'Dados de usuário incorretos'
@@ -45,46 +54,55 @@ def login_view(request):
 
 
 
+def register_view(request):
+    registerForm = RegisterForm()
+    message = None
 
+    if request.user.is_authenticated:
+        return redirect('/')
 
-    if verifyUsername is not None:
-        message = {
-            'type': 'danger',
-            'text': 'Já existe um usuário com este username!'
-        }
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        registerForm = RegisterForm(request.POST)
 
-    elif verifyEmail is not None:
-        message = {
-            'type': 'danger',
-            'text': 'Já existe um usuário com este e-mail!'
-        }
+        if registerForm.is_valid():
 
-    else:
-        user = User.objects.create_user(username, email, password)
+            # Aqui verificamos se existe usuário ou e-mail com esse cadastro
+            verifyUsername = User.objects.filter(username=username).first()
+            verifyEmail = User.objects.filter(email=email).first()
 
-        if user is not None:
-            message = {
-                'type': 'success',
-                'text': 'Conta criada com sucesso!'
-            }
-        else:
-            message = {
-                'type': 'danger',
-                'text': 'Um erro ocorreu ao tentar criar o usuário.'
-            }
+            if verifyUsername is not None:
+                message = {
+                    'type': 'danger',
+                    'text': 'Já existe um usuário com este username!'
+                }
 
-    context = {
-        'form': registerForm,
-        'message': message,
-        'title': 'Registrar',
-        'button_text': 'Registrar',
-        'link_text': 'Login',
-        'link_href': '/login'
-    }
+            elif verifyEmail is not None:
+                message = {
+                    'type': 'danger',
+                    'text': 'Já existe um usuário com este e-mail!'
+                }
 
-    return render(
-        request,
-        template_name='auth/auth.html',
-        context=context,
-        status=200
-    )
+            else:
+                user = User.objects.create_user(username, email, password)
+
+                if user is not None:
+                    message = {
+                        'type': 'success',
+                        'text': 'Conta criada com sucesso!'
+                    }
+                else:
+                    message = {
+                        'type': 'danger',
+                        'text': 'Um erro ocorreu ao tentar criar o usuário.'
+                    }
+
+    context = {'form': registerForm,'message': message,'title': 'Registrar','button_text': 'Registrar','link_text': 'Login','link_href': '/login'}
+
+    return render(request,template_name='auth/auth.html',context=context,status=200)
+
+def logout_view(request):
+    logout(request)
+    return redirect('/login')

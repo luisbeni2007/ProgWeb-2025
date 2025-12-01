@@ -74,6 +74,9 @@ def list_produto_view(request, id=None):
     return render(request, template_name='produto/produto-create.html', context=context, status=200)
 
 # A FUNÇÃO EDIT_PRODUTO_VIEW (BUSCAR E MOSTRAR PARA EDIÇÃO)
+# Adicione a linha a seguir
+@login_required
+# Até aqui
 def edit_produto_view(request, id=None):
     produtos = Produto.objects.all()
     if id is not None:
@@ -168,3 +171,4 @@ def edit_produto_postback(request, id=None):
             
     # Se for um GET (ou outra requisição), redireciona para a lista
     return redirect('produto')
+    
