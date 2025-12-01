@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from loja.models import Produto, Fabricante, Categoria
 from datetime import timedelta, datetime
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 
@@ -73,8 +74,7 @@ def list_produto_view(request, id=None):
             
     return render(request, template_name='produto/produto-create.html', context=context, status=200)
 
-# A FUNÇÃO EDIT_PRODUTO_VIEW (BUSCAR E MOSTRAR PARA EDIÇÃO)
-# Adicione a linha a seguir
+
 @login_required
 # Até aqui
 def edit_produto_view(request, id=None):
