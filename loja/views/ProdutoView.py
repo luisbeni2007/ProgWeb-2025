@@ -5,8 +5,42 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 
-# A FUNÇÃO PRODUTO_VIEW (CRIAR PRODUTO)
 def list_produto_view(request, id=None):
+    produto = request.GET.get("produto")
+    destaque = request.GET.get("destaque")
+    promocao = request.GET.get("promocao")
+    categoria = request.GET.get("categoria")
+
+    fabricante = request.GET.get("fabricante")
+    dias = request.GET.get("dias")
+    produtos = Produto.objects.all()
+    if produto is not None:
+        produtos = produtos.filter(Produto__contains=produto)
+    if promocao is not None:
+        produtos = produtos.filter(promocao=promocao)
+    if destaque is not None:
+        produtos = produtos.filter(destaque=destaque)
+    if categoria is not None:
+        produtos = produtos.filter(categoria__Categoria=categoria)
+    if fabricante is not None:
+        produtos = produtos.filter(fabricante__Fabricante=fabricante)
+    if dias is not None:
+
+
+        now = timezone.now()
+        now = now - timedelta(days = int(dias))
+        produtos = produtos.filter(criado_em__gte=now)
+    if id is not None:
+        produtos = produtos.filter(id=id)
+    print(produtos)
+        # Adicione para definir o contexto e carregar o template
+    context = {
+        'produtos': produtos
+        }
+    return render(request, template_name='produto/produto.html',context=context, status=200)
+
+# A FUNÇÃO PRODUTO_VIEW (CRIAR PRODUTO)
+def create_produto_view(request, id=None):
     # Processa o post ou gerada pela action
     if request.method == 'POST':
         produto = request.POST.get("Produto")
@@ -170,5 +204,24 @@ def edit_produto_postback(request, id=None):
             return redirect(f'/produto/edit/{id}')
             
     # Se for um GET (ou outra requisição), redireciona para a lista
-    return redirect('produto')
-    
+    return redirect('produto') 
+
+def details_produto_view(request,id=None):
+    # Processa o evento GET gerado pela action
+    produtos = Produto.objects.all()
+    if id is not None:
+        produtos = produtos.filter(id=id)
+    produto = produtos.first()
+    print(produto)
+    context = {'produto': produto}
+    return render(request, template_name='produto/produto-details.html', context=context,status=200)
+
+def delete_produto_view(request, id=None):
+    # Processa o evento GET gerado pela action
+    produtos = Produto.objects.all()
+    if id is not None:
+        produtos = produtos.filter(id=id)
+    produto = produtos.first()
+    print(produto)
+    context = {'produto': produto}
+    return render(request, template_name='produto/produto-delete.html', context=context,status=200)
